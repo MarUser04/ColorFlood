@@ -8,6 +8,7 @@
 struct tablero{
 	int **matriz;
 	int filas, columnas;
+	
 };
 
 void cargarmatriz(tablero *tm);
@@ -16,16 +17,17 @@ void gotoxy(int x,int y);
 void menu();
 void seleccion();
 
+
 int main(int argc, char** argv) {
 	srand(time(0));
 	system("color f0");
 	
 	tablero tm;
 
-	char tecla;
-	int band=0, band1=0, n;
-	menu();
+	char tecla, esc;
+	int band=0, band1=0;
 	
+	menu();
 	
 	do{	
 	
@@ -42,17 +44,17 @@ int main(int argc, char** argv) {
 	          system("cls");
 	         
 	          do{
-	          	printf("\n\nSI DESEA REGRESAR AL MENU PRINCIPAL PRESIONE <4>.");
-	            scanf("%d",&n);
+	          	printf("\n\nSI DESEA REGRESAR AL MENU PRINCIPAL PRESIONE (4).");
+	        	 esc=getch();
 	            
-	             if(n!=4){
+	             if(esc!='4'){
 	          	     printf("\n OPCION INVALIDA, INTENTE DE NUEVO");
 				  }
 	          	
 	          	
-			  }while(n!=4);
+			  }while(esc!='4');
 	          
-	          if(n==4){
+	          if(esc=='4'){
 	          	
 	          	band1=1;
 	          	system("cls");
@@ -62,18 +64,18 @@ int main(int argc, char** argv) {
 			}
 			case 51:{
 				system("cls");
-				printf("CREADOR: MARCO JOSE USECHE RIVERA\n ESTUDIANTE INGENIERIA EN INFORMATICA\n UNET 216 ");
+				printf("CREADOR: MARCO JOSE USECHE RIVERA\n ESTUDIANTE INGENIERIA EN INFORMATICA\n UNET 2016 ");
 				do{
-	          	  printf("\n\nSI DESEA REGRESAR AL MENU PRINCIPAL PRESIONE <4>.");
-	            	scanf("%d",&n);
-	          	  if(n!=4){
+	          	  printf("\n\nSI DESEA REGRESAR AL MENU PRINCIPAL PRESIONE (4).");
+	            	esc=getch();
+	          	  if(esc!= '4'){
 	          	     printf("\n OPCION INVALIDA, INTENTE DE NUEVO");
 				  }
 				  
 	          	
-			   }while(n!=4);
+			   }while(esc!='4');
 	          
-	           if(n==4){
+	           if(esc=='4'){
 	          	
 	          	band1=1;
 	          	system("cls");
@@ -98,7 +100,6 @@ int main(int argc, char** argv) {
 	     }
 		
 		
-		
 	}while(band!=1);
 	
 	if(band==1){
@@ -108,10 +109,7 @@ int main(int argc, char** argv) {
 	
 	}
 	
-	
 
-	
-	
 	system("pause>null");
 	return 0;
 }
@@ -171,6 +169,10 @@ void cargarmatriz(tablero *tm)
 		tm->matriz[i]=new int [tm->columnas];
 	}
 	
+
+
+	
+	
 	for(int i=0;i<tm->filas;i++){
 		for(int j=0;j<tm->columnas;j++){
 			tm->matriz[i][j]=rand()%6;
@@ -213,13 +215,84 @@ void cargarmatriz(tablero *tm)
 		}
 	}
 	
+	seleccion();
+
+	/////////////////////
+	char boton;
+	int aux2;
+	
+	
+	fflush(stdin);
+	boton=getch();
+	aux2=boton-48;
+
+	int mat_aux[tm->filas][tm->columnas];
+
+	for(int i=0; i<tm->filas; i++)
+	{
+		for(int j=0; j<tm->columnas; j++)
+		{
+			mat_aux[i][j]=0;
+		}
+	}
+	
+	printf("\n\n\n");
+	switch(aux2)
+	{
+		case 'a':
+			mat_aux[0][0]=1;
+			break;
+		case 'b':
+			mat_aux[0][0]=2;
+			break;
+		case 'c':
+			mat_aux[0][0]=4;
+			break;
+		case 'd':
+			mat_aux[0][0]=5;
+			break;
+		case 'e':
+			mat_aux[0][0]=6;
+			break;
+		case 'f':
+			mat_aux[0][0]=3;
+			break;
+	}
+	
+	for(int i=0; i< tm->filas-1; i++)
+	{
+		for(int j=0; j< tm->columnas-1; j++)
+		{
+			if(mat_aux[i][j]== tm->matriz[i+1][j])
+			{
+				mat_aux[i+1][j]=tm->matriz[i+1][j];
+			}
+			
+			if(mat_aux[i][j]== tm->matriz[i][j+1])
+			{
+				mat_aux[i][j+1]=tm->matriz[i][j+1];
+			}
+		}
+	}
+	
+	for(int i=0; i< tm->filas; i++)
+	{
+		printf("\n");
+		for(int j=0; j< tm->columnas; j++)
+		{
+			printf("%d", mat_aux[i][j]);
+		}
+	}
+	
+	
+	
 	
 	
 }
 
 void menu()
 {
-	printf("\t-------BIENVENIDO A COLORFLOOD---USECHE EDITION V. 0.1 CON BUGS---------\n");
+	printf("\t-------BIENVENIDO A COLORFLOOD---USECHE EDITION V. 0.2 CON BUGS---------\n");
 	printf("\n\n\t-------(1)MODOS DE JUEGO----\n");
 	printf("\t-------(2)AYUDA-------------\n");
 	printf("\t-------(3)CREDITOS----------\n");
@@ -227,5 +300,29 @@ void menu()
 
 void seleccion()
 {
+	gotoxy(25, 5);
+	color(15*16+9);
+	printf("%c%c%c A", 219, 219, 219);
 	
+	gotoxy(25, 7);
+	color(15*16+12);
+	printf("%c%c%c B", 219, 219, 219);
+	
+	gotoxy(25, 9);
+	color(15*16+14);
+	printf("%c%c%c C", 219, 219, 219);
+	
+	gotoxy(25, 11);
+	color(15*16+13);
+	printf("%c%c%c D", 219, 219, 219);
+	
+	gotoxy(25, 13);
+	color(15*16+10);
+	printf("%c%c%c E", 219, 219, 219);
+	
+	gotoxy(25, 15);
+	color(15*16+11);
+	printf("%c%c%c F", 219, 219, 219);
 }
+
+
