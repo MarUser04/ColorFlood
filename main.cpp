@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 	          	printf("\n\n\t(1)LO PRIMERO QUE SE TIENE QUE REALIZAR ES ESCOGER UNA FIGURA CON LA CUAL JUGAR Y LA DIFICULTAD EN EL MENU DE SELECCION\n");
 	          	printf("\t(2)SE PRESENTARA UN TABLERO CON UN TAMAÑO ESTABLECIDO SEGUN LA DIFICULTAD,\n");
 	          	printf("\tY A LA DERECHA DE ESTA, UNA SERIES DE OPCIONES DE COLORES CON LAS LETRAS QUE REPRESENTA CADA UNO.	\n");
-	          	printf("\t\n(3)EL USUARIO ESCOGERA UN COLOR CON EL CUAL INICIAR, EL CUAL MODIFICARA LA ESQUINA SUPERIO IZQUIERDA DE LA MATRIZ\n");
+	          	printf("\n\t(3)EL USUARIO ESCOGERA UN COLOR CON EL CUAL INICIAR, EL CUAL MODIFICARA LA ESQUINA SUPERIO IZQUIERDA DE LA MATRIZ\n");
 	          	printf("\tCON EL OBJETIVO DE IGUALARLA A ALGUNA CASILLA ADYACENTE QUE TENGA EL MISMO COLOR.\n");
 	          	printf("\n\t(4) A CONTINUACION SE SELECCIONARA OTRO COLOR, Y ASI SUCESIVAMENTE HASTA LOGRAR LLENAR AL TABLERO DE UN SOLO COLOR,\n\t EL CUAL ES EL OBETIVO DEL JUEGO.\n");
 	          	printf("\tESTA SERIE DE CAMBIOS SE TENDRAN QUE HACER CON UN NUMERO LIMITE DE MOVIMIENTOS ESTABLECIDOS SEGUN LA DIFICULTAD,\n");
@@ -90,9 +90,9 @@ int main(int argc, char** argv) {
 			}
 			case 51:{
 				system("cls");
-				printf("CREADOR: MARCO JOSE USECHE RIVERA\n ESTUDIANTE INGENIERIA EN INFORMATICA\n UNET 2016 ");
+				printf("\n\t\tCREDITOS\n\n\t\tCREADOR: MARCO JOSE USECHE RIVERA\n\t\t ESTUDIANTE INGENIERIA EN INFORMATICA\n\t\t UNET 2016 ");
 				do{
-	          	  printf("\n\nSI DESEA REGRESAR AL MENU PRINCIPAL PRESIONE (4).");
+	          	  printf("\n\n\t\tSI DESEA REGRESAR AL MENU PRINCIPAL PRESIONE (4).");
 	            	esc=getch();
 	          	  if(esc!= '4'){
 	          	     printf("\n OPCION INVALIDA, INTENTE DE NUEVO");
@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
         	{   cargarmatriz(&tmc);
         		jugar(&tmc);
 				
-				printf("\n\n\n\tDesea regresar al menu principal? (S/N)");
+				printf("\n\n\n\tDESEA VOLVER A JUGAR? (S/N)");
 				r=getch();
 			}while(r=='s' || r=='S');
 	
@@ -165,8 +165,11 @@ void cargarmatriz(tablero *tmc)
 	char opc; 
 	int aux;
 	do{
+		
+	
 	system("cls");
-		eleccion(tmc);
+	color(15*16+0);
+	eleccion(tmc);
 	system("cls");
 	printf("-------SELECCIONE SU DIFICULTAD-------\n");
 	printf("-1-----FACIL-----\n");
@@ -355,36 +358,12 @@ void jugar(tablero *tmc)
 					tmc->matriz[i][j+1]=9;
 				}
 				
-				
-				/*if(i==tmc->filas-1 && j<tmc->columnas-1){
-					if(tmc->matriz[i][j+1]==tmc->aux2){
-						tmc->matriz[i][j+1]=9;
-					}
-					if(tmc->matriz[i][j-1]==tmc->aux2)	
-						tmc->matriz[i][j-1]==9;
-				}
-				if(j==tmc->columnas-1 && i!=tmc->filas-1  ){
-					if(tmc->matriz[i+1][j]==tmc->aux2){
-						tmc->matriz[i+1][j]=9;
-					}
-					if(tmc->matriz[i-1][j]==tmc->aux2)	
-						tmc->matriz[i-1][j]==9;
-					
-				}*/
-				
-				
+								
 			}
 		}
 	}
 
-	//k=ganador(tmc);
-
-	/*if(ganador(tmc)==1)
-	{
-		gotoxy(20,20);
-		printf("GANASTE!!!");
-		break;
-	}*/
+	
 
 	for(int i=0; i<tmc->filas; i++)
 	{
@@ -404,6 +383,7 @@ void jugar(tablero *tmc)
 	if(conta==(tmc->filas * tmc->columnas))
 	{
 		gotoxy(20,20);
+		color(15*16+0);
 		printf("GANASTE!!!");
 		break;
 	}
@@ -416,9 +396,11 @@ void jugar(tablero *tmc)
 	
 	}while(tmc->cont >0);
 	
+
 	if(tmc->cont==0)
 	{
 		gotoxy(20,20);
+		color(15*16+0);
 		printf("PERDISTE, LO SIENTO.");
 	}
 	
@@ -426,7 +408,7 @@ void jugar(tablero *tmc)
 
 void menu()
 {
-	printf("\t-------BIENVENIDO A COLORFLOOD---USECHE EDITION V. 0.2 CON BUGS---------\n");
+	printf("\t-------BIENVENIDO A COLORFLOOD------------\n");
 	printf("\n\n\t-------(1)JUGAR----\n");
 	printf("\t-------(2)AYUDA-------------\n");
 	printf("\t-------(3)CREDITOS----------\n");
