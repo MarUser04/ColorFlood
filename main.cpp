@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <time.h>
 #include <windows.h>
+#include <ctype.h>
 
 struct tablero{
 	int **matriz;
@@ -11,7 +12,7 @@ struct tablero{
 	char boton;
 	int aux2;
 	int cont;
-	int figura=219;
+	int figura;
 };
 
 void cargarmatriz(tablero *tmc);
@@ -22,13 +23,17 @@ void gotoxy(int x,int y);
 void menu();
 void seleccion(tablero *tmc);
 void eleccion(tablero *tmc);
+int ganador(tablero *tmc);
+void comprobacion(tablero *tmc);
 
 
 int main(int argc, char** argv) {
 	srand(time(0));
 	system("color f0");
 	
-	tablero tm;
+	tablero tmc;
+	
+	tmc.figura=219;
 
 	char tecla, esc, r;
 	int band=0, band1=0;
@@ -51,14 +56,14 @@ int main(int argc, char** argv) {
 	         
 	          do{
 	          	printf("\t\t-----AYUDA-----\n\n");
-	          	printf("\n\tEL OBJETIVO DE COLORFLOOD ES MUY SENCILLO, HACER QUE LA MATRIZ QUEDE DE UN SOLO COLOR,\n");
-	          	printf("\n\tA PARTIR DE CAMBIOS DE COLORES QUE EL USUARIO REALIZE.\n");
-	          	printf("\n\t(1)LO PRIMERO QUE SE TIENE QUE REALIZAR ES ESCOGER UNA DIFICULTAD EN EL MENU DE SELECCION\n");
-	          	printf("\t(2)SE PRESENTARA LA MATRIZ DE UN TAMAÑO ESTABLECIDO SEGUN LA DIFICULTAD,\n");
+	          	printf("\n\tEL OBJETIVO DE COLORFLOOD ES MUY SENCILLO, HACER QUE EL TABLERO QUEDE DE UN SOLO COLOR,\n");
+	          	printf("\n\tA PARTIR DE CAMBIOS DE COLORES QUE EL USUARIO REALICE.\n");
+	          	printf("\n\n\t(1)LO PRIMERO QUE SE TIENE QUE REALIZAR ES ESCOGER UNA FIGURA CON LA CUAL JUGAR Y LA DIFICULTAD EN EL MENU DE SELECCION\n");
+	          	printf("\t(2)SE PRESENTARA UN TABLERO CON UN TAMAÑO ESTABLECIDO SEGUN LA DIFICULTAD,\n");
 	          	printf("\tY A LA DERECHA DE ESTA, UNA SERIES DE OPCIONES DE COLORES CON LAS LETRAS QUE REPRESENTA CADA UNO.	\n");
-	          	printf("\t(3)EL USUARIO ESCOGERA UN COLOR CON EL CUAL INICIAR, EL CUAL MODIFICARA LA ESQUINA SUPERIO IZQUIERDA DE LA MATRIZ\n");
+	          	printf("\t\n(3)EL USUARIO ESCOGERA UN COLOR CON EL CUAL INICIAR, EL CUAL MODIFICARA LA ESQUINA SUPERIO IZQUIERDA DE LA MATRIZ\n");
 	          	printf("\tCON EL OBJETIVO DE IGUALARLA A ALGUNA CASILLA ADYACENTE QUE TENGA EL MISMO COLOR.\n");
-	          	printf("\t(4) A CONTINUACION SE SELECCIONARA OTRO COLOR, Y ASI SUCESIVAMENTE HASTA LOGRAR LLENAR LA MATRIZ DE UN SOLO COLOR, EL CUAL ES EL OBETIVO DEL JUEGO.\n");
+	          	printf("\n\t(4) A CONTINUACION SE SELECCIONARA OTRO COLOR, Y ASI SUCESIVAMENTE HASTA LOGRAR LLENAR AL TABLERO DE UN SOLO COLOR,\n\t EL CUAL ES EL OBETIVO DEL JUEGO.\n");
 	          	printf("\tESTA SERIE DE CAMBIOS SE TENDRAN QUE HACER CON UN NUMERO LIMITE DE MOVIMIENTOS ESTABLECIDOS SEGUN LA DIFICULTAD,\n");
 	          	printf("\tEN CASO DE NO LOGRAR EL OBJETIVO ANTES DE QUE SE ACABEN EL NUMERO LIMITE DE MOVIMIENTOS, EL USUARIO PIERDE EL JUEGO.");
 	          	
@@ -171,7 +176,6 @@ void cargarmatriz(tablero *tmc)
     
     fflush(stdin);
     opc= getch();
-    
     aux=opc-48;
 	}while(aux<1 || aux>4);
 	
@@ -263,7 +267,7 @@ void imprimir(tablero *tmc)
 			}
 			else if(tmc->matriz[i][j]==6 )
 			{
-				color(15*16+10);
+				color(15*16+2);
 				printf("%c", tmc->figura);
 			}
 			else if(tmc->matriz[i][j]==9)
@@ -291,7 +295,7 @@ void imprimir(tablero *tmc)
 						printf("%c", tmc->figura);
 						break;
 					case 6:
-						color(15*16+10);
+						color(15*16+2);
 						printf("%c", tmc->figura);
 						break;
 				}
@@ -305,7 +309,10 @@ void imprimir(tablero *tmc)
 
 void jugar(tablero *tmc)
 {
+	//int k=0;
+	comprobacion(tmc);
 	tmc->matriz[0][0]=9;
+	int conta=0;
 	
 	do
 	{
@@ -316,6 +323,7 @@ void jugar(tablero *tmc)
 	
 	fflush(stdin);
 	tmc->boton=getch();
+	tmc->boton=tolower(tmc->boton);
 	tmc->aux2=tmc->boton-48-48;
 	
 	}while(!(tmc->aux2 >0 && tmc->aux2<7));
@@ -324,13 +332,13 @@ void jugar(tablero *tmc)
 	
 
 	
-	for(int i=0; i<tmc->filas-1; i++)
+	for(int i=0; i<tmc->filas; i++)
 	{
-		for(int j=0; j< tmc->columnas-1; j++)
+		for(int j=0; j< tmc->columnas; j++)
 		{
 			if(tmc->matriz[i][j]==9)
 			{
-				if(tmc->matriz[i+1][j]==tmc->aux2)
+				if(i+1<tmc->filas && tmc->matriz[i+1][j]==tmc->aux2)
 				{
 					tmc->matriz[i+1][j]=9;
 				}
@@ -342,14 +350,63 @@ void jugar(tablero *tmc)
 				{
 					tmc->matriz[i][j-1]=9;
 				}
-				if( tmc->matriz[i][j+1]==tmc->aux2)
+				if( j+1<tmc->columnas && tmc->matriz[i][j+1]==tmc->aux2)
 				{
 					tmc->matriz[i][j+1]=9;
 				}
+				
+				
+				/*if(i==tmc->filas-1 && j<tmc->columnas-1){
+					if(tmc->matriz[i][j+1]==tmc->aux2){
+						tmc->matriz[i][j+1]=9;
+					}
+					if(tmc->matriz[i][j-1]==tmc->aux2)	
+						tmc->matriz[i][j-1]==9;
+				}
+				if(j==tmc->columnas-1 && i!=tmc->filas-1  ){
+					if(tmc->matriz[i+1][j]==tmc->aux2){
+						tmc->matriz[i+1][j]=9;
+					}
+					if(tmc->matriz[i-1][j]==tmc->aux2)	
+						tmc->matriz[i-1][j]==9;
+					
+				}*/
+				
+				
 			}
 		}
 	}
 
+	//k=ganador(tmc);
+
+	/*if(ganador(tmc)==1)
+	{
+		gotoxy(20,20);
+		printf("GANASTE!!!");
+		break;
+	}*/
+
+	for(int i=0; i<tmc->filas; i++)
+	{
+		for(int j=0; j<tmc->columnas; j++)
+		{
+			if(tmc->matriz[i][j]==9)
+			{
+				conta++;
+			}
+			else
+			{
+				conta=0;
+			}
+		}
+	}
+
+	if(conta==(tmc->filas * tmc->columnas))
+	{
+		gotoxy(20,20);
+		printf("GANASTE!!!");
+		break;
+	}
 	
 	system("cls");
 	imprimir(tmc);
@@ -358,12 +415,19 @@ void jugar(tablero *tmc)
 	
 	
 	}while(tmc->cont >0);
+	
+	if(tmc->cont==0)
+	{
+		gotoxy(20,20);
+		printf("PERDISTE, LO SIENTO.");
+	}
+	
 }
 
 void menu()
 {
 	printf("\t-------BIENVENIDO A COLORFLOOD---USECHE EDITION V. 0.2 CON BUGS---------\n");
-	printf("\n\n\t-------(1)MODOS DE JUEGO----\n");
+	printf("\n\n\t-------(1)JUGAR----\n");
 	printf("\t-------(2)AYUDA-------------\n");
 	printf("\t-------(3)CREDITOS----------\n");
 }
@@ -372,7 +436,7 @@ void seleccion(tablero *tmc)
 {
 	
 	gotoxy(25, 3);
-	color(15*16+8);
+	color(15*16+0);
 	printf("MOVIMIENTOS: %d", tmc->cont);
 	
 	
@@ -397,7 +461,7 @@ void seleccion(tablero *tmc)
 	printf("%c%c%c E", 219, 219, 219);
 	
 	gotoxy(25, 15);
-	color(15*16+10);
+	color(15*16+6);
 	printf("%c%c%c F", 219, 219, 219);
 }
 
@@ -409,10 +473,10 @@ void eleccion(tablero *tmc)
 	printf("\n\tESCOGA LA FIGURA CON LA QUE DESEE JUGAR: ");
 	
 	gotoxy(2, 3);
-	printf("(A)CLASICO %c", 219);
+	printf("(A) CLASICO %c", 219);
 	
 	gotoxy(2, 5);
-	printf("(B)CARA SONRIENTE %c", 02);
+	printf("(B) CARA SONRIENTE %c", 02);
 	
 	gotoxy(2, 7);
 	printf("(C) CORAZON %c", 03);
@@ -421,16 +485,16 @@ void eleccion(tablero *tmc)
 	printf("(D) ROMBO %c", 04);
 	
 	gotoxy(2, 11);
-	printf("(E)TREBOL %c", 05);
+	printf("(E) TREBOL %c", 05);
 	
 	gotoxy(2, 13);
-	printf("(F)DIAMANTE %c", 06);
+	printf("(F) PICA %c", 06);
 	
 	gotoxy(2, 15);
-	printf("(G)TRIANGULO %c", 30);
+	printf("(G) TRIANGULO %c", 30);
 	
 	gotoxy(2, 17);
-	printf("(H)ARROVA %c", 64);
+	printf("(H) ARROBA %c", 64);
 	
 	do
 	{
@@ -438,6 +502,7 @@ void eleccion(tablero *tmc)
 	
 	fflush(stdin);
     opc2= getch();
+    opc2=tolower(opc2);
     aux3=opc2-48-48;
     }while(!(aux3>0 && aux3 <9));
     
@@ -469,4 +534,58 @@ void eleccion(tablero *tmc)
     		break;
 	}
 	 
+}
+
+int ganador(tablero *tmc)
+{
+	
+	for(int i=0; i<tmc->filas-1; i++)
+	{
+		for(int j=0;tmc->columnas-1;j++)
+		{
+			if(tmc->matriz[i][j] !=9)
+			{
+				return 0;
+			}
+		}
+	}
+	
+	return 1;
+}
+
+void comprobacion(tablero *tmc)
+{
+	int comp;
+	
+	comp=tmc->matriz[0][0];
+	
+	for(int i=0; i<tmc->filas-1; i++)
+	{
+		for(int j=0; j< tmc->columnas-1; j++)
+		{
+			if(tmc->matriz[i][j]==comp)
+			{
+				tmc->matriz[0][0]=9;
+				
+				if( tmc->matriz[i+1][j]==comp && tmc->matriz[i][j]==9)
+				{
+					tmc->matriz[i+1][j]=9;
+				}
+				if(i-1>=0 && tmc->matriz[i-1][j]==comp && tmc->matriz[i][j]==9)
+				{
+					tmc->matriz[i-1][j]=9;
+				}
+				if(j-1>=0 && tmc->matriz[i][j-1]==comp && tmc->matriz[i][j]==9)
+				{
+					tmc->matriz[i][j-1]=9;
+				}
+				if( tmc->matriz[i][j+1]==comp && tmc->matriz[i][j]==9)
+				{
+					tmc->matriz[i][j+1]=9;
+				}
+
+			}
+		}
+	}
+	
 }
