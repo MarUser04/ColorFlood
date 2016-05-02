@@ -13,6 +13,7 @@ struct tablero{
 	int aux2;
 	int cont;
 	int figura;
+	int conta;
 };
 
 void cargarmatriz(tablero *tmc);
@@ -175,7 +176,7 @@ void cargarmatriz(tablero *tmc)
 	printf("-1-----FACIL-----\n");
 	printf("-2-----MEDIO-----\n");
 	printf("-3-----DIFICIL---\n");
-
+	printf("-------PRESIONE OTRA TECLA PARA VOLVER AL MENU DE SELECCION DE FIGURAS------");
     
     fflush(stdin);
     opc= getch();
@@ -196,6 +197,7 @@ void cargarmatriz(tablero *tmc)
 			tmc->filas=20;
 			tmc->columnas=20;
 			break;
+	
 	
 	}
 	
@@ -312,10 +314,10 @@ void imprimir(tablero *tmc)
 
 void jugar(tablero *tmc)
 {
-	//int k=0;
+	
 	comprobacion(tmc);
 	tmc->matriz[0][0]=9;
-	int conta=0;
+	
 	
 	do
 	{
@@ -363,39 +365,28 @@ void jugar(tablero *tmc)
 		}
 	}
 
-	
-
-	for(int i=0; i<tmc->filas; i++)
-	{
-		for(int j=0; j<tmc->columnas; j++)
-		{
-			if(tmc->matriz[i][j]==9)
-			{
-				conta++;
-			}
-			else
-			{
-				conta=0;
-			}
-		}
-	}
-
-	if(conta==(tmc->filas * tmc->columnas))
+	/*if(ganador(tmc))
 	{
 		gotoxy(20,20);
 		color(15*16+0);
 		printf("GANASTE!!!");
 		break;
-	}
+	}*/
+	
+	
+
 	
 	system("cls");
 	imprimir(tmc);
 	seleccion(tmc);
 	
+
+	
+	}while(tmc->cont >0 );
+
 	
 	
-	}while(tmc->cont >0);
-	
+
 
 	if(tmc->cont==0)
 	{
@@ -520,19 +511,29 @@ void eleccion(tablero *tmc)
 
 int ganador(tablero *tmc)
 {
+
+	tmc->conta=0;
 	
-	for(int i=0; i<tmc->filas-1; i++)
+	for(int i=0; i<tmc->filas; i++)
 	{
-		for(int j=0;tmc->columnas-1;j++)
+		for(int j=0; j<tmc->columnas; j++)
 		{
-			if(tmc->matriz[i][j] !=9)
+			if(tmc->matriz[i][j]==9)
 			{
-				return 0;
+				tmc->conta++;
 			}
 		}
 	}
 	
-	return 1;
+	if(tmc->conta==(tmc->filas*tmc->columnas))
+	{
+		return 1;
+	}
+	else 
+	{
+		return 0;
+	}
+	
 }
 
 void comprobacion(tablero *tmc)
