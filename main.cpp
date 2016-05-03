@@ -25,12 +25,14 @@ void menu();
 void seleccion(tablero *tmc);
 void eleccion(tablero *tmc);
 int ganador(tablero *tmc);
+int perdedor(tablero *tmc);
 void comprobacion(tablero *tmc);
 
 
 int main(int argc, char** argv) {
 	srand(time(0));
 	system("color f0");
+	//PlaySound(("ST"), NULL,SND_FILENAME|SND_LOOP|SND_ASYNC); //-lwinmm
 	
 	tablero tmc;
 	
@@ -177,6 +179,7 @@ void cargarmatriz(tablero *tmc)
 	printf("-2-----MEDIO-----\n");
 	printf("-3-----DIFICIL---\n");
 	printf("-------PRESIONE OTRA TECLA PARA VOLVER AL MENU DE SELECCION DE FIGURAS------");
+	
     
     fflush(stdin);
     opc= getch();
@@ -203,7 +206,7 @@ void cargarmatriz(tablero *tmc)
 	
 	if(tmc->filas==10)
 	{
-		tmc->cont= 22;
+		tmc->cont= 60;
 	}
 	else if(tmc->filas==15)
 	{
@@ -240,7 +243,7 @@ void cargarmatriz(tablero *tmc)
 
 void imprimir(tablero *tmc)
 {
-
+	system("cls");
 	
 	for(int i=0;i<tmc->filas;i++){
 		printf("\n");
@@ -315,6 +318,7 @@ void imprimir(tablero *tmc)
 void jugar(tablero *tmc)
 {
 	
+	
 	comprobacion(tmc);
 	tmc->matriz[0][0]=9;
 	
@@ -365,14 +369,15 @@ void jugar(tablero *tmc)
 		}
 	}
 
-	/*if(ganador(tmc))
+
+	
+	if(perdedor(tmc))
 	{
 		gotoxy(20,20);
 		color(15*16+0);
-		printf("GANASTE!!!");
+		printf("PERDISTE, LO SIENTO.");
 		break;
-	}*/
-	
+	}
 	
 
 	
@@ -380,20 +385,23 @@ void jugar(tablero *tmc)
 	imprimir(tmc);
 	seleccion(tmc);
 	
-
-	
-	}while(tmc->cont >0 );
-
-	
-	
-
-
-	if(tmc->cont==0)
+	if(ganador(tmc))
 	{
 		gotoxy(20,20);
 		color(15*16+0);
-		printf("PERDISTE, LO SIENTO.");
+		printf("GANASTE!!!");
+		break;
 	}
+	
+
+	
+	}while(1);
+
+	
+	
+
+
+
 	
 }
 
@@ -532,6 +540,19 @@ int ganador(tablero *tmc)
 	else 
 	{
 		return 0;
+	}
+	
+}
+
+int perdedor(tablero *tmc)
+{
+
+	if(tmc->cont>0)
+	{
+		return 0;
+	}
+	else{
+		return 1;
 	}
 	
 }
